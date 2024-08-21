@@ -1,7 +1,8 @@
 from django.urls import path
-from .views import  create_database, upload_data, display_data
+from .views import  create_database, upload_data, display_data, home
 
 urlpatterns = [
+    path('', home, name='home'),
 
     path('create-database/', create_database, name='create_database'),
 

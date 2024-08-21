@@ -1,5 +1,6 @@
 import os
 import requests, json
+from django.http import HttpResponse
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -63,3 +64,6 @@ def display_data(request):
             return JsonResponse({'status': 'Failed', 'error': str(e)}, status=500)
     
     return JsonResponse({'status': 'Failed', 'error': 'Only GET method allowed'}, status=405)
+
+def home(request):
+    return HttpResponse("Welcome to the Blazegraph Django App. Use /create-database/, /upload-data/, or /display-data/ endpoints.")
