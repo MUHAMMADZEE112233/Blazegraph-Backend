@@ -2,11 +2,12 @@ import os
 import requests, json
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.conf import settings
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .blazegraph_client import BlazegraphClient
 
-blazegraph_endpoint = 'http://192.168.0.102:9999/blazegraph'
+blazegraph_endpoint = settings.BLAZEGRAPH_ENDPOINT
 client = BlazegraphClient(blazegraph_endpoint)
 
 @csrf_exempt
@@ -38,7 +39,7 @@ def upload_data(request):
 
         try:
             file_content = ttl_file.read()
-            url = f'http://192.168.0.102:9999/blazegraph/namespace/{namespace}/sparql'
+            url = f'{blazegraph_endpoint}/namespace/{namespace}/sparql'
             headers = {'Content-Type': 'text/turtle'}
             response = requests.post(url, data=file_content, headers=headers)
             response.raise_for_status()
@@ -47,7 +48,6 @@ def upload_data(request):
             return JsonResponse({'status': 'Failed', 'error': str(e)}, status=500)
     
     return JsonResponse({'status': 'Failed', 'error': 'Only POST method allowed'}, status=405)
-
 
 def display_data(request):
     if request.method == 'GET':
